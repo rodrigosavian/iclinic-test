@@ -25,7 +25,7 @@ def get_patients_autocomplete():
 
     try:
         # Search patients on service
-        result = service.get_patients_by_name(request.args.get('q'))
+        result = service.get_patients_by_name(q)
     except Exception as e:
         # Service error
         return util.response_error(
