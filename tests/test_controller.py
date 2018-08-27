@@ -1,6 +1,8 @@
 import unittest
 import json
 
+from unittest.mock import patch
+
 from app import create_app
 
 
@@ -71,6 +73,18 @@ class ControllerTestClass(unittest.TestCase):
         self.assertEqual(data['message'], 'patient not found')
         self.assertIn('errorCode', data)
         self.assertEqual(data['errorCode'], '40400')
+
+    @patch('app.patients.service.get_patients_by_name', side_effect=Exception())
+    def test_get_patients_autocomplete_internal_server_error(self, get_patients_by_name):
+
+        response = self.client.get('/patients/autocomplete?q=internalservererror')
+        self.assertEqual(response.status_code, 500)
+        data = json.loads(response.data)
+        self.assertEqual(type(data), dict)
+        self.assertIn('message', data)
+        self.assertEqual(data['message'], 'internal server error')
+        self.assertIn('errorCode', data)
+        self.assertEqual(data['errorCode'], '50000')
 
 
 if __name__ == '__main__':
