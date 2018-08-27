@@ -3,7 +3,7 @@ from http import HTTPStatus
 from flask import Blueprint, request, json
 
 from app import util
-from app.patients import service, validate, error
+from app.patients import service, error, constant
 
 
 bp = Blueprint('patients', __name__, url_prefix='/patients')
@@ -17,7 +17,7 @@ def get_patients_autocomplete():
             error.ERR_PATIENTS_AUTOCOMPLETE_QUERYPARAM_Q_REQUIRED,
             HTTPStatus.BAD_REQUEST
         )
-    elif len(q) < validate.PATIENTS_AUTOCOMPLETE_QUERYPARAM_Q_MIN_LENGTH:
+    elif len(q) < constant.VALIDATE_PATIENTS_AUTOCOMPLETE_QUERYPARAM_Q_MIN_LENGTH:
         return util.response_error(
             error.ERR_PATIENTS_AUTOCOMPLETE_QUERYPARAM_Q_MIN_LENGTH,
             HTTPStatus.BAD_REQUEST
